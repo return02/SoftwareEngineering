@@ -1,0 +1,6 @@
+framework module Pods_SoftwareEngineering {
+  umbrella header "Pods-SoftwareEngineering-umbrella.h"
+
+  export *
+  module * { export * }
+}
