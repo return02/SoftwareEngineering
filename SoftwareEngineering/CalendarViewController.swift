@@ -17,14 +17,23 @@ class CalendarViewController: UIViewController {
     
     var width, height: CGFloat!
     var collectionView: JTAppleCalendarView!
+    var taskTableView: UITableView!
     var monthLabel: UILabel!
+    var taskArray: [UITableViewCell]!
+    var info = [
+        ["task1", "task2"],
+        ["task3", "task4"],
+        ["task5", "task6"]
+    ]
     func initializeView() {
         width = view.frame.width
         height = view.frame.height
+        print(height)
         
         view.backgroundColor = .white
         
         collectionView = JTAppleCalendarView(frame: CGRect(x: 0, y: height * 0.1, width: width, height: height * 0.5))
+//        collectionView.text
         collectionView.backgroundColor = .white
         collectionView.register(CalendarCell.self, forCellWithReuseIdentifier: "CalendarCell")
         collectionView.showsVerticalScrollIndicator = false
@@ -32,8 +41,8 @@ class CalendarViewController: UIViewController {
         collectionView.isPagingEnabled = true
         collectionView.ibCalendarDelegate = self
         collectionView.ibCalendarDataSource = self
-        collectionView.minimumInteritemSpacing = 0
-        collectionView.minimumLineSpacing = 0
+//        collectionView.minimumInteritemSpacing = 0
+//        collectionView.minimumLineSpacing = 0
         collectionView.scrollDirection = .horizontal
         view.addSubview(collectionView)
         
@@ -46,10 +55,38 @@ class CalendarViewController: UIViewController {
          TODO: 1
          完成本页其它界面
          */
+        
+        taskTableView = UITableView(frame: CGRect(
+            x: 0, y: collectionView.frame.origin.y + collectionView.frame.height,
+            width: width, height: height * 0.4 - (tabBarController?.tabBar.frame.height)!), style: .grouped)
+        taskTableView.delegate = self
+        taskTableView.dataSource = self
+        taskTableView.register(UITableViewCell.self, forCellReuseIdentifier: "TaskCell")
+        taskTableView.separatorStyle = .singleLine
+        view.addSubview(taskTableView)
     }
 }
 
-extension CalendarViewController: JTAppleCalendarViewDelegate, JTAppleCalendarViewDataSource {
+extension CalendarViewController: JTAppleCalendarViewDelegate, JTAppleCalendarViewDataSource, UITableViewDelegate, UITableViewDataSource
+{
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TaskCell", for: indexPath) as UITableViewCell
+        if let myLabel = cell.textLabel {
+            myLabel.text = "\(info[indexPath.section][indexPath.row])"
+//            myLabel.text = "hello"
+        }
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return info[section].count
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return info.count
+    }
+
     func configureCalendar(_ calendar: JTAppleCalendarView) -> ConfigurationParameters {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy MM dd"
@@ -84,4 +121,5 @@ extension CalendarViewController: JTAppleCalendarViewDelegate, JTAppleCalendarVi
     func calendar(_ calendar: JTAppleCalendarView, didDeselectDate date: Date, cell: JTAppleCell?, cellState: CellState) {
         
     }
+    
 }
