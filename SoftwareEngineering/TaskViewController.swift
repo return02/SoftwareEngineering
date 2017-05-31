@@ -44,6 +44,10 @@ class TaskViewController: UIViewController {
          TODO: 4
          准备当前用户的任务数据并存在task中
          */
+        for t in tasks!{
+            task.append(t as! NSDictionary)
+        }
+        print("task: \(task)")
     }
     
     func addTask() {
@@ -65,12 +69,27 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TaskCell", for: indexPath)
-        //cell.textLabel?.text = "\(indexPath.row)"
+//        cell.textLabel?.text = "\(indexPath.row)"
         
         /*
          TODO: 4
          需要根据任务显示的需要来自定义样式
          */
+        let t = task[indexPath.row]
+        let endDate = t["endDate"] as! String
+        let startDate = t["startDate"] as! String
+        let importance = t["importance"] as! Int
+        var importance_stars = String()
+        for _ in 1...importance{
+            importance_stars += "*"
+            // 暂时先这样，改天改成图片。。
+        }
+        let title = t["title"] as! String
+        let user = t["user"] as! Int
+        let taskNumber = t["task"] as! Int
+        // Q: 这两个整型是什么意思，如何显示 --zcg
+        cell.textLabel?.text = "\(title):     \(importance_stars)     \(startDate)~\(endDate)"
+        // TODO: 左右对齐
         
         return cell
     }
@@ -85,8 +104,10 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
          TODO: 4
          从task中删除任务
          */
-        
+        task.remove(at: indexPath.row)
+        print("task: \(task)")
         tableView.reloadData()
+        // TODO: 从文件中把任务删除
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
