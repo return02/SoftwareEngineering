@@ -37,7 +37,6 @@ class RegisterViewController: UIViewController {
         width = view.frame.width
         height = view.frame.height
         
-        navigationController?.navigationBar.isHidden = true
         view.backgroundColor = .white
         
         idTextField = UITextField(frame: CGRect(x: width * 0.2, y: height * 0.4, width: width * 0.6, height: height * 0.08))
@@ -112,7 +111,7 @@ class RegisterViewController: UIViewController {
         }
         
         if wrongInfo.count == 0{
-            let alertView = UIAlertView(title: "警告", message: "注册成功", delegate: self, cancelButtonTitle: "确定")
+            let alertView = UIAlertView(title: "", message: "注册成功", delegate: self, cancelButtonTitle: "确定")
             alertView.show()
             accountInfo.append(["user": accountInfo.count, "id": idTextField.text!,"password": passwordTextField.text!])
             (accountInfo as NSArray).write(toFile: documentPath, atomically: true)
@@ -126,8 +125,15 @@ class RegisterViewController: UIViewController {
             }
             
             
-            let alertView = UIAlertView(title: "警告", message: alertInfo, delegate: self, cancelButtonTitle: "   确定")
+            let alertView = UIAlertView(title: "", message: alertInfo, delegate: self, cancelButtonTitle: "确定")
             alertView.show()
         }
+    }
+}
+extension RegisterViewController: UITextFieldDelegate
+{
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }
