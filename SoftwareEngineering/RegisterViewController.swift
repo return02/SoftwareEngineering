@@ -43,6 +43,7 @@ class RegisterViewController: UIViewController {
         idTextField.placeholder = "用户名"
         idTextField.borderStyle = .roundedRect
         idTextField.returnKeyType = .done
+        idTextField.delegate = self
         view.addSubview(idTextField)
         
         passwordTextField = UITextField(frame: CGRect(x: width * 0.2, y: height * 0.5, width: width * 0.6, height: height * 0.08))
@@ -50,6 +51,7 @@ class RegisterViewController: UIViewController {
         passwordTextField.isSecureTextEntry = true
         passwordTextField.borderStyle = .roundedRect
         passwordTextField.returnKeyType = .done
+        passwordTextField.delegate = self
         view.addSubview(passwordTextField)
         
         passwordCheckTextField = UITextField(frame: CGRect(x: width * 0.2, y: height * 0.6, width: width * 0.6, height: height * 0.08))
@@ -57,6 +59,7 @@ class RegisterViewController: UIViewController {
         passwordCheckTextField.isSecureTextEntry = true
         passwordCheckTextField.borderStyle = .roundedRect
         passwordCheckTextField.returnKeyType = .done
+        passwordCheckTextField.delegate = self
         view.addSubview(passwordCheckTextField)
         
         registerButton = UIButton(frame: CGRect(x: width * 0.4, y: height * 0.7, width: width * 0.2, height: height * 0.08))
@@ -104,7 +107,7 @@ class RegisterViewController: UIViewController {
             wrongInfo.add(5)
         }
         for account in accountInfo{
-            if (account as! NSDictionary)["id"] as! String  == idTextField.text{
+            if account["id"] as! String  == idTextField.text!{
                 wrongInfo.add(6)
                 break
             }
