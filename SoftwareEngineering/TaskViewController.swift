@@ -52,13 +52,12 @@ class TaskViewController: UIViewController {
     
     func addTask() {
         let mVC = ModifyViewController()
-        
         /*
          TODO: 2
          参数准备
          */
-        
         navigationController?.pushViewController(mVC, animated: true)
+        
     }
 }
 
