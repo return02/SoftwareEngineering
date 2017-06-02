@@ -74,20 +74,111 @@ class LoginViewController: UIViewController {
          TODO: 5
          完成本页其它界面
          */
+        /*
+         界面不是已经完成了吗
+         */
     }
     
     func register() {
         navigationController?.pushViewController(RegisterViewController(), animated: true)
     }
     
+    let strFilter="qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890_"
+    func checkStr(str:String) -> Bool
+    {
+        for c in str.characters
+        {
+            var flag:Bool = false
+            for s in strFilter.characters
+            {
+                if c == s
+                {
+                    flag = true
+                    break
+                }
+            }
+            if flag == false
+            {
+                return false
+            }
+        }
+        return true
+        
+    }
+    var user,password:String!;
     func login() {
         /*
          TODO: 5
          验证用户名密码并存储用户登录信息
          */
+        print("in login");
+        let loginInfo = NSHomeDirectory() + "/Documents/user"
+        /*if FileManager.default.fileExists(atPath: loginInfo)
+         {
+         print("file is not exist");
+         return //准备改成异常
+         }*/
+        var accountInfo = NSArray(contentsOfFile: loginInfo) as! [NSDictionary]
+        if let id:String = idTextField.text
+        {
+            if checkStr(str: id) == false
+            {
+                let alertView = UIAlertView(title:"用户名错误", message:"用户名包含不合法字符",delegate: self, cancelButtonTitle: "确定");
+                alertView.show();
+                return //显示用户名有错误信息
+            }
+            
+        }
+        else
+        {
+            let alertView = UIAlertView(title:"用户名错误", message:"缺少用户名",delegate: self, cancelButtonTitle: "确定");
+            alertView.show();
+            return //改成缺少用户名
+            
+        }
         
-        navigationController?.pushViewController(TabBarController(), animated: true)
+        if let pwd:String = passwordTextField.text
+        {
+            if checkStr(str: pwd) == false
+            {
+                let alertView = UIAlertView(title:"密码错误", message:"密码包含不合法字符",delegate: self, cancelButtonTitle: "确定");
+                alertView.show();
+                return //显示密码有错误信息
+            }
+        }
+        else
+        {
+            let alertView = UIAlertView(title:"密码错误", message:"缺少密码",delegate: self, cancelButtonTitle: "确定");
+            alertView.show();
+            return //改成缺少密码
+            
+        }
+        for account in accountInfo
+        {
+            if account["id"] as! String == idTextField.text
+            {
+                if(account["password"] as! String == passwordTextField.text)
+                {
+                    user = account["id"] as! String
+                    password = account["password"] as! String
+                    navigationController?.pushViewController(TabBarController(), animated: true)
+                    return ;
+                }
+                else
+                {
+                    let alertView = UIAlertView(title:"密码错误", message:"密码错误",delegate: self, cancelButtonTitle: "确定");
+                    alertView.show();
+                    return ;
+                }
+            }
+        }
+        let alertView = UIAlertView(title:"用户名错误", message:"该用户不存在",delegate: self, cancelButtonTitle: "确定");
+        alertView.show();
+        return ;
+        
+        //navigationController?.pushViewController(TabBarController(), animated: true)
     }
+
 }
 
 extension LoginViewController: UITextFieldDelegate
