@@ -112,12 +112,13 @@ class LoginViewController: UIViewController {
          验证用户名密码并存储用户登录信息
          */
         print("in login");
-        let loginInfo = NSHomeDirectory() + "/Documents/user"
-        /*if FileManager.default.fileExists(atPath: loginInfo)
-         {
-         print("file is not exist");
-         return //准备改成异常
-         }*/
+        let document = NSHomeDirectory() + "/Documents";
+        let loginInfo = document + "/user"
+        if FileManager.default.fileExists(atPath: loginInfo) == false
+        {
+            print("file is not exist");
+            return //准备改成异常
+        }
         var accountInfo = NSArray(contentsOfFile: loginInfo) as! [NSDictionary]
         if let id:String = idTextField.text
         {
@@ -161,6 +162,17 @@ class LoginViewController: UIViewController {
                 {
                     user = account["id"] as! String
                     password = account["password"] as! String
+                    
+                    var userInfo = [NSDictionary]()
+                    userInfo.append(["user":user, "password":password])
+                    (userInfo as NSArray).write(toFile: document+"/userInfo", atomically: true)
+                    
+                    
+                    
+                    /*var testInfo1 = NSArray(contentsOfFile: document+"/userInfo") as! [NSDictionary]
+                    print(testInfo1);*/
+ 
+                    
                     navigationController?.pushViewController(TabBarController(), animated: true)
                     return ;
                 }
